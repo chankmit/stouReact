@@ -7,6 +7,8 @@ class Product extends Component {
         super();
         this.state={
             date: new Date(),
+            totalPrice:0,
+            orders:[],
             products:[
                 {productId:1, productName:'Americano', unitPrice:'45', thumbnail:'images/am.jpg'},
                 {productId:2, productName:'Caputino', unitPrice:'50', thumbnail:'images/es.jpg'}
@@ -15,8 +17,22 @@ class Product extends Component {
         setInterval(()=>this.tick(), 1000)
     }
 
+
     tick(){
         this.setState({date: new Date()})
+    }
+
+    addOrder(product){
+        console.log(product)
+        let findOrder = this.state.orders.find(item=>item.product.productId == product.productId);
+        if(findOrder) {
+            findOrder.quantity++;
+        } else {
+            this.state.orders.push({product:product, quantity:1})
+        }
+        const totalPrice = this.state.totalPrice+parseInt(product.unitPrice);
+        console.log('ราคา '+totalPrice)
+        this.setState({totalPrice: totalPrice, orders:this.state.orders});
     }
 
     render() {
@@ -36,6 +52,7 @@ class Product extends Component {
                         </h3>
                     </div>
                 </div>
+                <hr/>
                 <div className="row">
                     <div className="col-md-8">
                         <div className="row">
@@ -44,13 +61,13 @@ class Product extends Component {
                                     <img src={item.thumbnail} className="img-thumbnail" />
                                     <h5>{item.productName}</h5>
                                     <p>{item.unitPrice} THB</p>
-                                    <button className="btn btn-success btn-sm">(+) ADD TO CARD</button>
+                                    <button onClick={()=>this.addOrder(item)} className="btn btn-success btn-sm">(+) ADD TO CARD</button>
                                 </div>
                             ))}
                         </div> 
                     </div>
                     <div className="col-md-4">
-                        <Calulator />
+                        <Calulator totalPrice={this.state.totalPrice} orders={this.state.orders} />
                     </div>
                 </div>
             </div>

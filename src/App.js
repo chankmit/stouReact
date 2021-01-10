@@ -4,6 +4,7 @@ import Covid from "./pages/Covid";
 import Footer from "./pages/Footer";
 import Header from "./pages/Header";
 import Home from "./pages/Home";
+import Product from "./pages/Product";
 import Profile from "./pages/Profile";
 
 var App = () => {
@@ -12,6 +13,7 @@ var App = () => {
       <Header />
       <Route exact path="/" component={Home}></Route>
       <Route exact path="/about" component={About}></Route> 
+      <Route exact path="/products" component={Product}></Route>
       <Route exact path="/profile" component={Profile}></Route>
       <Route exact path="/covid" component={Covid}></Route>
       <Footer />

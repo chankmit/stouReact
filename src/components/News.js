@@ -9,7 +9,7 @@ class News extends Component {
     }
     
     componentDidMount(){
-        var apiurl="http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=f26ee0f721c2411f91aee45055e744f6";
+        var apiurl="http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=176ab3b50a584b7bb4c825bc236f6b32";
         fetch(apiurl, {method:'GET'}).then(res=>res.json()).then(result=>{
             console.log(result);
             this.setState({news:result.articles})

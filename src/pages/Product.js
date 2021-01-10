@@ -15,8 +15,18 @@ class Product extends Component {
             ]
         }
         setInterval(()=>this.tick(), 1000)
+        this.cancelOrder=this.cancelOrder.bind(this);
+        this.deleteOrder=this.deleteOrder.bind(this);
+        this.confirmOrder=this.confirmOrder.bind(this);
     }
 
+    componentDidMount(){
+        var url="http://localhost:8000/products"
+        fetch(url, {method:'GET'}).then(res=>res.json()).then(result=>{
+            console.log(result)
+            this.setState({products:result.products})
+        })
+    }
 
     tick(){
         this.setState({date: new Date()})
@@ -33,6 +43,23 @@ class Product extends Component {
         const totalPrice = this.state.totalPrice+parseInt(product.unitPrice);
         console.log('ราคา '+totalPrice)
         this.setState({totalPrice: totalPrice, orders:this.state.orders});
+    }
+
+    cancelOrder(){
+        this.setState({totalPrice:0, orders:[]})
+    }
+
+    deleteOrder(product){
+        let findOrder = this.state.orders.find(item=>item.product.productId == product.productId);
+        let resultOrder = this.state.orders.filter(item=>item.product.productId != product.productId);
+        let totalPrice = this.state.totalPrice - (findOrder.quantity*parseInt(findOrder.product.unitPrice));
+
+        this.setState({totalPrice:totalPrice, orders:resultOrder})
+    }
+
+    confirmOrder(){
+        console.log('Confirm Order Clicked')
+
     }
 
     render() {
@@ -67,7 +94,12 @@ class Product extends Component {
                         </div> 
                     </div>
                     <div className="col-md-4">
-                        <Calulator totalPrice={this.state.totalPrice} orders={this.state.orders} />
+                        <Calulator 
+                            onDeleteOrder={this.deleteOrder} 
+                            onConfirmOrder={this.confirmOrder} 
+                            onCancelOrder={this.cancelOrder} 
+                            totalPrice={this.state.totalPrice} 
+                            orders={this.state.orders} />
                     </div>
                 </div>
             </div>
